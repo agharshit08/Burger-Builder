@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 import Aux from '../../hoc/AuxComponent';
 import Burger from '../../components/Burger/Burger';
@@ -13,10 +13,10 @@ const INGREDIENT_PRICES = {
     bacon: 0.7
 };
 
-class BurgerBuilder extends Component{
+class BurgerBuilder extends Component {
 
     state = {
-        ingredients : {
+        ingredients: {
             salad: 0,
             bacon: 0,
             cheese: 0,
@@ -30,7 +30,7 @@ class BurgerBuilder extends Component{
     // Always change state immutably. Here adding ingredients.
     addIngredientHandler = (type) => {
         const oldCount = this.state.ingredients[type];
-        const updatedCount = oldCount+1;
+        const updatedCount = oldCount + 1;
         const updatedIngredients = {
             ...this.state.ingredients
         }
@@ -45,15 +45,15 @@ class BurgerBuilder extends Component{
 
     updatePurchaseState = (totalPrice) => {
         const sum = totalPrice;
-        this.setState({purchasable: sum > 4.00})
+        this.setState({ purchasable: sum > 4.00 })
     }
 
     removeIngredientHandler = (type) => {
         const oldCount = this.state.ingredients[type];
-        if(oldCount < 1){
+        if (oldCount < 1) {
             return;
         }
-        const updatedCount = oldCount-1;
+        const updatedCount = oldCount - 1;
         const updatedIngredients = {
             ...this.state.ingredients
         }
@@ -67,35 +67,40 @@ class BurgerBuilder extends Component{
     }
 
     purchaseHandler = () => {
-        this.setState({purchasing: true});
+        this.setState({ purchasing: true });
     }
 
-    render(){
+    purchaseCancelHandler = () => {
+        this.setState({ purchasing: false });
+    }
+
+    render() {
 
         // For disabling buttons.
         const disabledInfo = {
             ...this.state.ingredients
         }
-        for(let key in disabledInfo){
+        for (let key in disabledInfo) {
             disabledInfo[key] = disabledInfo[key] <= 0;
         }
 
+
         return (
             <Aux>
-                <Modal show={this.state.purchasing}>
-                    <OrderSummary ingredients={this.state.ingredients}/>
+                <Modal show={this.state.purchasing} modalClosed={this.purchaseCancelHandler}>
+                    <OrderSummary ingredients={this.state.ingredients} />
                 </Modal>
-                <Burger ingredients={this.state.ingredients}/>
+                <Burger ingredients={this.state.ingredients} />
                 <BuildControls
                     ingredientAdded={this.addIngredientHandler}
                     ingredientRemoved={this.removeIngredientHandler}
                     disabled={disabledInfo}
                     purchasable={this.state.purchasable}
                     ordered={this.purchaseHandler}
-                    price={this.state.totalPrice}/>
+                    price={this.state.totalPrice} />
             </Aux>
         );
     }
-} 
+}
 
 export default BurgerBuilder;
