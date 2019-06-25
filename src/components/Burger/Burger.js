@@ -6,20 +6,26 @@ import BurgerIngredient from './BurgerIngredients/BurgerIngredients';
 const burger = (props) => {
 
     // Defining dynamic JSX 
-    const transformedIngredient = Object.keys(props.ingredients).map(igKey => {
+    let transformedIngredients = Object.keys(props.ingredients).map(igKey => {
         return [...Array(props.ingredients[igKey])]
         .map((_, i) => {
             return <BurgerIngredient key = {igKey+i}
             type = {igKey}
             />
         });
-    });
+    })
+    .reduce((arr, el) => {
+        return arr.concat(el);
+    }, []);
 
-    // Buildin the actual Burger.
+    if(transformedIngredients.length === 0){
+        transformedIngredients = 'Please start adding Ingredients!'
+    }
+    // Building the actual Burger.
     return (
         <div className={classes.Burger}>
             <BurgerIngredient type="bread-top"/>
-            {transformedIngredient}
+            {transformedIngredients}
             <BurgerIngredient type="bread-bottom"/>
         </div>
     );
