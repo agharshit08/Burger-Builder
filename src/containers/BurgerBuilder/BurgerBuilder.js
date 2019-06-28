@@ -35,7 +35,7 @@ class BurgerBuilder extends Component {
                 this.setState({ ingredients: res.data })
             })
             .catch((_) => {
-                this.setState({error : true});
+                this.setState({ error: true });
                 console.log('err')
             });
     }
@@ -90,42 +90,14 @@ class BurgerBuilder extends Component {
     // Just use .json for Firebase
     purchaseContinue = () => {
 
-        // this.setState({ loading: true });
-        // const order = {
-        //     ingredients: this.state.ingredients,
-        //     price: this.state.totalPrice,
-        //     customer: {
-        //         name: 'Harshit Agrwawal',
-        //         address: {
-        //             city: 'California',
-        //             country: 'US'
-        //         },
-        //         email: 'test@test.com'
-        //     },
-        //     deliveryMethod: 'Fastest'
-        // }
-        // axios.post('/orders.json', order)
-        //     .then(res => {
-        //         this.setState({
-        //             loading: false,
-        //             purchasing: false
-        //         });
-        //     })
-        //     .catch(rej => {
-        //         this.setState({
-        //             loading: false,
-        //             purchasing: false
-        //         });
-        //     });
-
-        //Creating a query string here which pass as a route name so 
+        // Creating a query string here which pass as a route name so 
         // that we can build the custom burger
         const queryParams = [];
-        for(let i in this.state.ingredients){
+        for (let i in this.state.ingredients) {
             queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i]));
         }
+        queryParams.push('price=' + this.state.totalPrice);
         const queryString = queryParams.join('&');
-
         this.props.history.push({
             pathname: '/checkout',
             search: '?' + queryString
@@ -143,11 +115,11 @@ class BurgerBuilder extends Component {
         }
 
         let orderSummary = null;
-        let burger = this.state.error ? <p>  Ingredients can't be loaded at the moment. Come back soon!</p> : <Spinner/>
+        let burger = this.state.error ? <p>  Ingredients can't be loaded at the moment. Come back soon!</p> : <Spinner />
 
         if (this.state.ingredients) {
-            burger = 
-                   <Aux>
+            burger =
+                <Aux>
                     <Burger ingredients={this.state.ingredients} />
                     <BuildControls
                         ingredientAdded={this.addIngredientHandler}
